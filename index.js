@@ -51,7 +51,7 @@ app.post('/api/song', async (req, res) => {
         messages: [
           {
             role: "user",
-            content: `Imagine the ingredients as the mood or vibe of a song. Suggest one song that best matches the vibe of these ingredients: ${ingredients}. Mention the artist, song title, and a short reason why.`,
+            content: `Imagine the ingredients as the mood or vibe of a song. Suggest one song that best matches the vibe of these ingredients: ${ingredients}. Mention the artist, song title, and a short reason why. Keep the response very short.`,
           },
         ],
         model: "llama3-70b-8192",
