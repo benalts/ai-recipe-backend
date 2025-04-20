@@ -1,14 +1,17 @@
 import express from 'express';
 import 'dotenv/config';
+import cors from 'cors';
 import Groq from 'groq-sdk';
 
 const app = express();
 
 const port = 3000;
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+app.use(cors());
 
 app.use(express.json());
+
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 app.post('/api/recipe', async (req, res) => {
   const { ingredients } = req.body;
