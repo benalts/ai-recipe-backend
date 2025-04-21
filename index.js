@@ -2,6 +2,8 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import Groq from 'groq-sdk';
+import favoriteRoutes from './favorite.js';
+import initDBRoutes from './init_db.js';
 
 const app = express();
 
@@ -66,9 +68,7 @@ app.post('/api/song', async (req, res) => {
 });
 
 // routes for different pages
-import favoriteRoutes from './favorite.js';
 app.use('/favorite', favoriteRoutes);
-import initDBRoutes from './init_db.js';
 app.use('/init_db', initDBRoutes);
 
 app.listen(port, () => {
