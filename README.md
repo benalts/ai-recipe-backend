@@ -13,6 +13,7 @@ This is a simple Node.js + Express API that uses the Groq LLM to generate recipe
 {
   "ingredients": "chicken, rice, broccoli, garlic"
 }
+···
 
 ## How to add User
 
@@ -24,6 +25,7 @@ The example request body is:
   "email": "test01@example.com",
   "password": "test01"
 }
+···
 
 ## How to add Users's Favorite Recipe
 
@@ -39,3 +41,4 @@ The example request body is:
     "steps": ["Beat eggs", "Stir-fry with tomatoes"]
   }
 }
+···
