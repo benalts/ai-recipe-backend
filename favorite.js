@@ -52,4 +52,30 @@ router.post('/create', async (req, res) => {
     res.status(500).json({ error: 'Failed to save favorite recipe' });
   }
 });
+
+//delete record
+router.delete('/delete', async (req, res) => {
+  const { id } = req.query;
+
+  if (!id) {
+    return res.status(400).json({ error: 'Missing favorite recipe id' });
+  }
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM favorite_recipes WHERE id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Favorite recipe not found' });
+    }
+
+    res.json({ message: 'Favorite recipe deleted successfully', deleted: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error deleting favorite recipe:', err);
+    res.status(500).json({ error: 'Failed to delete favorite recipe' });
+  }
+});
+
 export default router;
