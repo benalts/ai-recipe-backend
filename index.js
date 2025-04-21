@@ -4,6 +4,7 @@ import cors from 'cors';
 import Groq from 'groq-sdk';
 import favoriteRoutes from './favorite.js';
 import initDBRoutes from './init_db.js';
+import userRoutes from './user.js';
 
 const app = express();
 
@@ -70,6 +71,7 @@ app.post('/api/song', async (req, res) => {
 // routes for different pages
 app.use('/favorite', favoriteRoutes);
 app.use('/init_db', initDBRoutes);
+app.use('/user', userRoutes);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
