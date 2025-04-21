@@ -65,6 +65,10 @@ app.post('/api/song', async (req, res) => {
     }
 });
 
+// routes for different pages
+const favoriteRoutes = require('./favorite');
+app.use('/favorite', favoriteRoutes);
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
