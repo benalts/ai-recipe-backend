@@ -66,7 +66,7 @@ app.post('/api/song', async (req, res) => {
 });
 
 // routes for different pages
-const favoriteRoutes = require('./favorite');
+import favoriteRoutes from './favorite.js';
 app.use('/favorite', favoriteRoutes);
 
 app.listen(port, () => {
