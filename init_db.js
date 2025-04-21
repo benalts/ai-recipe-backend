@@ -1,14 +1,9 @@
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
+import express from 'express';
+import pool from './db.js';
 
-dotenv.config();
+const router = express.Router();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
-
-async function init() {
+router.get('/init_db', async (req, res) => {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -47,11 +42,13 @@ async function init() {
     `);
 
     console.log('Tables created successfully.');
-    process.exit();
+    // process.exit();
+    res.send('Database initialized successfully.');
   } catch (err) {
     console.error('Error creating tables:', err);
-    process.exit(1);
+    // process.exit(1);
+    res.status(500).send('Database initialization failed.')
   }
-}
+});
 
-init();
+export default router;
