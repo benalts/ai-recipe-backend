@@ -73,7 +73,7 @@ router.delete('/delete', async (req, res) => {
 
     res.json({ message: 'Favorite recipe deleted successfully', deleted: result.rows[0] });
   } catch (err) {
-    console.error('❌ Error deleting favorite recipe:', err);
+    console.error('Error deleting favorite recipe:', err);
     res.status(500).json({ error: 'Failed to delete favorite recipe' });
   }
 });
