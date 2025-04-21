@@ -68,6 +68,8 @@ app.post('/api/song', async (req, res) => {
 // routes for different pages
 import favoriteRoutes from './favorite.js';
 app.use('/favorite', favoriteRoutes);
+import initDBRoutes from './init_db.js';
+app.use('/init_db', initDBRoutes);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
