@@ -2,6 +2,8 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import Groq from 'groq-sdk';
+import pool from './db.js'; // make sure this is at the top
+
 
 const app = express();
 
@@ -12,6 +14,27 @@ app.use(cors());
 app.use(express.json());
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+
+app.post('/user/create', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  try {
+    const result = await pool.query(
+      'INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email',
+      [email, password]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('User creation failed:', err);
+    res.status(500).json({ error: 'Failed to create user' });
+  }
+});
+
 
 app.post('/api/recipe', async (req, res) => {
   const { ingredients } = req.body;
@@ -64,20 +87,6 @@ app.post('/api/song', async (req, res) => {
     console.error('Groq API error (song):', error);
     res.status(500).json({ error: 'Failed to generate song recommendation.' });
   }
-});
-
-app.post('/user/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  // 🔒 In a real app, you'd validate against a database.
-  // For testing/demo, fake a user record:
-  if (email === 'admin@admin.com' && password === 'admin') {
-    return res.json({ id: 1, email });
-  }
-
-  // Optionally check other users from a real DB if added later
-
-  return res.status(401).json({ error: 'Invalid credentials' });
 });
 
 
