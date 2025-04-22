@@ -2,7 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import Groq from 'groq-sdk';
-import pool from './db.js'; // make sure this is at the top
+import pool from './db.js';
 
 
 const app = express();
