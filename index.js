@@ -4,18 +4,18 @@ import cors from 'cors';
 import Groq from 'groq-sdk';
 import pool from './db.js';
 
-
 const app = express();
-
 const port = 3000;
 
 app.use(cors());
-
 app.use(express.json());
 
+// === GROQ client setup ===
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-
+/* ================================
+   👤 Create User
+================================== */
 app.post('/user/create', async (req, res) => {
   const { email, password } = req.body;
 
@@ -35,7 +35,36 @@ app.post('/user/create', async (req, res) => {
   }
 });
 
+/* ================================
+   🔐 Login User
+================================== */
+app.post('/user/login', async (req, res) => {
+  const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  try {
+    const result = await pool.query(
+      'SELECT id, email FROM users WHERE email = $1 AND password = $2',
+      [email, password]
+    );
+
+    if (result.rows.length > 0) {
+      return res.status(200).json(result.rows[0]); // ✅ Login success
+    } else {
+      return res.status(401).json({ error: 'Invalid credentials' }); // ❌ Wrong email or password
+    }
+  } catch (err) {
+    console.error('Login failed:', err);
+    res.status(500).json({ error: 'Failed to log in' });
+  }
+});
+
+/* ================================
+   🍳 Recipe Generation (AI)
+================================== */
 app.post('/api/recipe', async (req, res) => {
   const { ingredients } = req.body;
 
@@ -62,6 +91,9 @@ app.post('/api/recipe', async (req, res) => {
   }
 });
 
+/* ================================
+   🎵 Song Recommendation (AI)
+================================== */
 app.post('/api/song', async (req, res) => {
   const { recipe } = req.body;
 
@@ -89,7 +121,9 @@ app.post('/api/song', async (req, res) => {
   }
 });
 
-
+/* ================================
+   🚀 Start Server
+================================== */
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`✅ Server running at http://localhost:${port}`);
 });
